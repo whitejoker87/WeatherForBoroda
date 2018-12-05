@@ -8,11 +8,13 @@ import android.support.annotation.NonNull;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import ru.orehovai.weatherforboroda.model.Town;
 import ru.orehovai.weatherforboroda.model.WeatherData;
 
 public class ListCountriesViewModel extends ViewModel {
@@ -47,8 +49,30 @@ public class ListCountriesViewModel extends ViewModel {
         return weatherData;
     }
 
-    private List<String> towns = new ArrayList<>();
-    String[] arrTowns = {"Москва", "Санкт-Петербург", "Екатеринбург", "Краснодар"};
-    
+
+    String[] arrTownsRussian = {"Москва", "Санкт-Петербург", "Екатеринбург", "Краснодар", "Ростов-на-Дону", "Самара", "Архангельск", "Тула", "Брянск", "Мурманск"};
+    private List<Town> townsRussian = new ArrayList<>();
+    String[] arrTownsOthers = {"Нью-Йорк", "Лондон", "Париж", "Берлин", "Токио", "Пхеньян", "Тбилиси", "Вена", "Буэнос-Айрес", "Рейкъявик"};
+    private List<Town> townsOthers = new ArrayList<>();
+
+    public void setTowns() {
+        Town town = new Town();
+        for (String townRussian:arrTownsRussian) {
+            town.setName(townRussian);
+            townsRussian.add(town);
+        }
+        for (String townOther:arrTownsOthers) {
+            town.setName(townOther);
+            townsOthers.add(town);
+        }
+    }
+
+    public List<Town> getTownsRussian() {
+        return townsRussian;
+    }
+
+    public List<Town> getTownsOthers() {
+        return townsOthers;
+    }
 
 }

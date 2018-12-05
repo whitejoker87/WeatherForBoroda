@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ListCountriesViewModel model = ViewModelProviders.of(this).get(ListCountriesViewModel.class);
         model.downloadWeatherData();
+        model.setTowns();
         model.getWeatherData().observe(this, new Observer<WeatherData>() {
             @Override
             public void onChanged(@Nullable WeatherData weatherData) {
