@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">WeatherForBoroda</string>
+    <string name="title_russia">Russia</string>
+    <string name="title_other">Other countries</string>
+</resources>
