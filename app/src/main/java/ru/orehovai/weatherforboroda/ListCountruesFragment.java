@@ -24,7 +24,7 @@ public class ListCountruesFragment extends Fragment {
     private ListCountruesFragmentBinding binding;
 
     private RecyclerView listTowns;
-    private TownsListAdapter adapter;
+    //private TownsListAdapter adapter;
 
     private TextView mTextMessage;
 
@@ -36,9 +36,11 @@ public class ListCountruesFragment extends Fragment {
             switch (item.getItemId()) {
                 case R.id.navigation_russia:
                     mTextMessage.setText(R.string.title_russia);
+                    listTowns.setAdapter(new TownsListAdapter(mViewModel.getTownsRussian()));
                     return true;
                 case R.id.navigation_other:
                     mTextMessage.setText(R.string.title_other);
+                    listTowns.setAdapter(new TownsListAdapter(mViewModel.getTownsOthers()));
                     return true;
             }
             return false;
@@ -63,11 +65,14 @@ public class ListCountruesFragment extends Fragment {
         mTextMessage = binding.message;
         BottomNavigationView navigation = binding.navigation;
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        listTowns = binding.recyclerTowns;
-        listTowns.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         mViewModel = ViewModelProviders.of(getActivity()).get(ListCountriesViewModel.class);
-        mViewModel.getWeatherData()
+        listTowns = binding.recyclerTowns;
+
+        listTowns.setLayoutManager(new LinearLayoutManager(getActivity()));
+        listTowns.setAdapter(new TownsListAdapter(mViewModel.getTownsRussian()));
+
+
+        //mViewModel.getWeatherData()
     }
 
 }
