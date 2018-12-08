@@ -4,10 +4,10 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.Query;
-import ru.orehovai.weatherforboroda.model.WeatherData;
+import ru.orehovai.weatherforboroda.model.weather.WeatherData;
 
 public interface IYandexWeatherAPI {
-    @Headers("X-Yandex-API-Key: c3a7cb4a-d543-4386-acd7-886d5fbb9839")
+    @Headers("X-Yandex-API-Key: 5099ea72-fb4b-49e4-a88c-68794153a08a")
     @GET("informers")
     Call <WeatherData> getWeatherData(@Query("lat") String lat, @Query("lon") String lon);
 }

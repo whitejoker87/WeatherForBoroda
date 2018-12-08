@@ -4,13 +4,13 @@ import android.app.Application;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import ru.orehovai.weatherforboroda.model.Geoposition.ResponseGeoposition;
-import ru.orehovai.weatherforboroda.model.WeatherData;
+import ru.orehovai.weatherforboroda.model.geoposition.ResponseGeoposition;
+import ru.orehovai.weatherforboroda.model.weather.WeatherData;
 
 public class App extends Application {
 
     private static IYandexWeatherAPI api;
-    private static  IYandexGeopositionAPI apiGeo;
+    private static IYandexGeopositionAPI apiGeo;
 
     private static WeatherData data;
     private static ResponseGeoposition dataGeo;

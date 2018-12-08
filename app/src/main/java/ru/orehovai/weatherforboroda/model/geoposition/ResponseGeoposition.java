@@ -1,9 +1,7 @@
-package ru.orehovai.weatherforboroda.model.Geoposition;
+package ru.orehovai.weatherforboroda.model.geoposition;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
-import ru.orehovai.weatherforboroda.model.Geoposition.Response;
 
 
 public class ResponseGeoposition {

@@ -17,9 +17,9 @@ import android.widget.TextView;
 
 import ru.orehovai.weatherforboroda.databinding.ListCountruesFragmentBinding;
 
-public class ListCountruesFragment extends Fragment {
+public class ListTownsFragment extends Fragment {
 
-    private ListCountriesViewModel mViewModel;
+    private ListTownsViewModel mViewModel;
 
     private ListCountruesFragmentBinding binding;
 
@@ -47,8 +47,8 @@ public class ListCountruesFragment extends Fragment {
         }
     };
 
-    public static ListCountruesFragment newInstance() {
-        return new ListCountruesFragment();
+    public static ListTownsFragment newInstance() {
+        return new ListTownsFragment();
     }
 
     @Override
@@ -65,7 +65,7 @@ public class ListCountruesFragment extends Fragment {
         mTextMessage = binding.message;
         BottomNavigationView navigation = binding.navigation;
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        mViewModel = ViewModelProviders.of(getActivity()).get(ListCountriesViewModel.class);
+        mViewModel = ViewModelProviders.of(getActivity()).get(ListTownsViewModel.class);
         listTowns = binding.recyclerTowns;
 
         listTowns.setLayoutManager(new LinearLayoutManager(getActivity()));

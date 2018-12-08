@@ -5,20 +5,17 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.support.annotation.NonNull;
 
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import ru.orehovai.weatherforboroda.model.Geoposition.ResponseGeoposition;
+import ru.orehovai.weatherforboroda.model.geoposition.ResponseGeoposition;
 import ru.orehovai.weatherforboroda.model.Town;
-import ru.orehovai.weatherforboroda.model.WeatherData;
+import ru.orehovai.weatherforboroda.model.weather.WeatherData;
 
-public class ListCountriesViewModel extends ViewModel {
+public class ListTownsViewModel extends ViewModel {
 
     private String apikey = "c3a7cb4a-d543-4386-acd7-886d5fbb9839";
     private String format = "json";
@@ -49,11 +46,12 @@ public class ListCountriesViewModel extends ViewModel {
 
 
     public void downloadGeoData() {
-        App.getApiGeo().getGeoPosition("c3a7cb4a-d543-4386-acd7-886d5fbb9839", "json", "Москва").enqueue(new Callback<ResponseGeoposition>() {
+        App.getApiGeo().getGeoPosition("5099ea72-fb4b-49e4-a88c-68794153a08a", "json", "Москва").enqueue(new Callback<ResponseGeoposition>() {
             @Override
             public void onResponse(Call<ResponseGeoposition> call, Response<ResponseGeoposition> response) {
                 if (response.code() == 200){
                     setGeoData(response.body());
+                    //downloadWeatherData();
                 }
             }
 

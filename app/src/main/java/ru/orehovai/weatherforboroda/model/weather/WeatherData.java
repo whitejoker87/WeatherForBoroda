@@ -1,11 +1,10 @@
-package ru.orehovai.weatherforboroda.model;
+package ru.orehovai.weatherforboroda.model.weather;
 
-import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Reader;
 import java.util.List;
+
 
 public class WeatherData {
 
@@ -21,9 +20,9 @@ public class WeatherData {
     @SerializedName("fact")
     @Expose
     private Fact fact;
-    @SerializedName("forecast")
+    @SerializedName("forecasts")
     @Expose
-    private List<Forecast> forecast = null;
+    private List<Forecast> forecasts = null;
 
     public Integer getNow() {
         return now;
@@ -57,21 +56,12 @@ public class WeatherData {
         this.fact = fact;
     }
 
-    public List<Forecast> getForecast() {
-        return forecast;
+    public List<Forecast> getForecasts() {
+        return forecasts;
     }
 
-    public void setForecast(List<Forecast> forecast) {
-        this.forecast = forecast;
-    }
-
-    public static WeatherData fromJson(Reader json){
-        try{
-            return new Gson().fromJson(json, WeatherData.class);
-        }catch (Exception e){
-            e.printStackTrace();
-            return null;
-        }
+    public void setForecasts(List<Forecast> forecasts) {
+        this.forecasts = forecasts;
     }
 
 }

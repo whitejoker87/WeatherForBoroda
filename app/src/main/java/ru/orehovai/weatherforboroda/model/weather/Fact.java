@@ -1,4 +1,4 @@
-package ru.orehovai.weatherforboroda.model;
+package ru.orehovai.weatherforboroda.model.weather;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -35,6 +35,15 @@ public class Fact {
     @SerializedName("humidity")
     @Expose
     private Integer humidity;
+    @SerializedName("uv_index")
+    @Expose
+    private Integer uvIndex;
+    @SerializedName("soil_temp")
+    @Expose
+    private Integer soilTemp;
+    @SerializedName("soil_moisture")
+    @Expose
+    private Double soilMoisture;
     @SerializedName("daytime")
     @Expose
     private String daytime;
@@ -47,6 +56,12 @@ public class Fact {
     @SerializedName("obs_time")
     @Expose
     private Integer obsTime;
+    @SerializedName("accum_prec")
+    @Expose
+    private AccumPrec accumPrec;
+    @SerializedName("source")
+    @Expose
+    private String source;
 
     public Integer getTemp() {
         return temp;
@@ -128,6 +143,30 @@ public class Fact {
         this.humidity = humidity;
     }
 
+    public Integer getUvIndex() {
+        return uvIndex;
+    }
+
+    public void setUvIndex(Integer uvIndex) {
+        this.uvIndex = uvIndex;
+    }
+
+    public Integer getSoilTemp() {
+        return soilTemp;
+    }
+
+    public void setSoilTemp(Integer soilTemp) {
+        this.soilTemp = soilTemp;
+    }
+
+    public Double getSoilMoisture() {
+        return soilMoisture;
+    }
+
+    public void setSoilMoisture(Double soilMoisture) {
+        this.soilMoisture = soilMoisture;
+    }
+
     public String getDaytime() {
         return daytime;
     }
@@ -158,6 +197,22 @@ public class Fact {
 
     public void setObsTime(Integer obsTime) {
         this.obsTime = obsTime;
+    }
+
+    public AccumPrec getAccumPrec() {
+        return accumPrec;
+    }
+
+    public void setAccumPrec(AccumPrec accumPrec) {
+        this.accumPrec = accumPrec;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 
 }

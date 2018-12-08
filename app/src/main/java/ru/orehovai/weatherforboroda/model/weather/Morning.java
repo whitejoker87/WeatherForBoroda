@@ -1,13 +1,13 @@
-package ru.orehovai.weatherforboroda.model;
+package ru.orehovai.weatherforboroda.model.weather;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Part {
+public class Morning {
 
-    @SerializedName("part_name")
+    @SerializedName("_source")
     @Expose
-    private String partName;
+    private String source;
     @SerializedName("temp_min")
     @Expose
     private Integer tempMin;
@@ -50,9 +50,18 @@ public class Part {
     @SerializedName("humidity")
     @Expose
     private Integer humidity;
+    @SerializedName("uv_index")
+    @Expose
+    private Integer uvIndex;
+    @SerializedName("soil_temp")
+    @Expose
+    private Integer soilTemp;
+    @SerializedName("soil_moisture")
+    @Expose
+    private Double soilMoisture;
     @SerializedName("prec_mm")
     @Expose
-    private Integer precMm;
+    private Double precMm;
     @SerializedName("prec_period")
     @Expose
     private Integer precPeriod;
@@ -60,12 +69,12 @@ public class Part {
     @Expose
     private Integer precProb;
 
-    public String getPartName() {
-        return partName;
+    public String getSource() {
+        return source;
     }
 
-    public void setPartName(String partName) {
-        this.partName = partName;
+    public void setSource(String source) {
+        this.source = source;
     }
 
     public Integer getTempMin() {
@@ -180,11 +189,35 @@ public class Part {
         this.humidity = humidity;
     }
 
-    public Integer getPrecMm() {
+    public Integer getUvIndex() {
+        return uvIndex;
+    }
+
+    public void setUvIndex(Integer uvIndex) {
+        this.uvIndex = uvIndex;
+    }
+
+    public Integer getSoilTemp() {
+        return soilTemp;
+    }
+
+    public void setSoilTemp(Integer soilTemp) {
+        this.soilTemp = soilTemp;
+    }
+
+    public Double getSoilMoisture() {
+        return soilMoisture;
+    }
+
+    public void setSoilMoisture(Double soilMoisture) {
+        this.soilMoisture = soilMoisture;
+    }
+
+    public Double getPrecMm() {
         return precMm;
     }
 
-    public void setPrecMm(Integer precMm) {
+    public void setPrecMm(Double precMm) {
         this.precMm = precMm;
     }
 
