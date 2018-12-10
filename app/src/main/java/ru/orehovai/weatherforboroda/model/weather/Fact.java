@@ -19,7 +19,7 @@ public class Fact {
     private String condition;
     @SerializedName("wind_speed")
     @Expose
-    private Integer windSpeed;
+    private Double windSpeed;
     @SerializedName("wind_gust")
     @Expose
     private Double windGust;
@@ -95,11 +95,11 @@ public class Fact {
         this.condition = condition;
     }
 
-    public Integer getWindSpeed() {
+    public Double getWindSpeed() {
         return windSpeed;
     }
 
-    public void setWindSpeed(Integer windSpeed) {
+    public void setWindSpeed(Double windSpeed) {
         this.windSpeed = windSpeed;
     }
 

@@ -22,7 +22,7 @@ public class NightShort {
     private Double windSpeed;
     @SerializedName("wind_gust")
     @Expose
-    private Integer windGust;
+    private Double windGust;
     @SerializedName("wind_dir")
     @Expose
     private String windDir;
@@ -91,11 +91,11 @@ public class NightShort {
         this.windSpeed = windSpeed;
     }
 
-    public Integer getWindGust() {
+    public Double getWindGust() {
         return windGust;
     }
 
-    public void setWindGust(Integer windGust) {
+    public void setWindGust(Double windGust) {
         this.windGust = windGust;
     }
 

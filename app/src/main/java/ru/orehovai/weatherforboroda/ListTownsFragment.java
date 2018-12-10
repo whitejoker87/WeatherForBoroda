@@ -15,16 +15,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import ru.orehovai.weatherforboroda.databinding.ListCountruesFragmentBinding;
+import ru.orehovai.weatherforboroda.databinding.ListTownsFragmentBinding;
 
 public class ListTownsFragment extends Fragment {
 
     private ListTownsViewModel mViewModel;
 
-    private ListCountruesFragmentBinding binding;
+    private ListTownsFragmentBinding binding;
 
     private RecyclerView listTowns;
-    //private TownsListAdapter adapter;
 
     private TextView mTextMessage;
 
@@ -35,26 +34,24 @@ public class ListTownsFragment extends Fragment {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_russia:
+                    mViewModel.setRussian(true);
                     mTextMessage.setText(R.string.title_russia);
-                    listTowns.setAdapter(new TownsListAdapter(mViewModel.getTownsRussian()));
+                    listTowns.setAdapter(new TownsListAdapter(mViewModel.getTownsRussian().getValue(), getActivity()));
                     return true;
                 case R.id.navigation_other:
+                    mViewModel.setRussian(false);
                     mTextMessage.setText(R.string.title_other);
-                    listTowns.setAdapter(new TownsListAdapter(mViewModel.getTownsOthers()));
+                    listTowns.setAdapter(new TownsListAdapter(mViewModel.getTownsOthers().getValue(), getActivity()));
                     return true;
             }
             return false;
         }
     };
 
-    public static ListTownsFragment newInstance() {
-        return new ListTownsFragment();
-    }
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.list_countrues_fragment, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.list_towns_fragment, container, false);
         return binding.getRoot();
     }
 
@@ -62,17 +59,21 @@ public class ListTownsFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mTextMessage = binding.message;
         BottomNavigationView navigation = binding.navigation;
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
         mViewModel = ViewModelProviders.of(getActivity()).get(ListTownsViewModel.class);
         listTowns = binding.recyclerTowns;
-
+        mTextMessage = binding.message;
         listTowns.setLayoutManager(new LinearLayoutManager(getActivity()));
-        listTowns.setAdapter(new TownsListAdapter(mViewModel.getTownsRussian()));
-
-
-        //mViewModel.getWeatherData()
+        if (mViewModel.isRussian()) {
+            listTowns.setAdapter(new TownsListAdapter(mViewModel.getTownsRussian().getValue(), getActivity()));
+            mTextMessage.setText(R.string.title_russia);
+        }
+        else {
+            listTowns.setAdapter(new TownsListAdapter(mViewModel.getTownsOthers().getValue(), getActivity()));
+            mTextMessage.setText(R.string.title_other);
+        }
     }
-
 }
+

@@ -11,6 +11,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import ru.orehovai.weatherforboroda.model.TownCard;
 import ru.orehovai.weatherforboroda.model.geoposition.ResponseGeoposition;
 import ru.orehovai.weatherforboroda.model.Town;
 import ru.orehovai.weatherforboroda.model.weather.WeatherData;
@@ -23,8 +24,8 @@ public class ListTownsViewModel extends ViewModel {
 
     private String[] subStrGeoPos;
 
-    public void downloadWeatherData(){
-        App.getAPI().getWeatherData(getLatGeoPos(), getLonGeoPos()).enqueue(new Callback<WeatherData>() {//используем Retrofit 2 и асинхронную загрузку
+    public void downloadWeatherData(String lat, String lon){
+        App.getAPI().getWeatherData(lat, lon, 3, false, false).enqueue(new Callback<WeatherData>() {//используем Retrofit 2 и асинхронную загрузку
             @Override
             public void onResponse(@NonNull Call<WeatherData> call, @NonNull Response<WeatherData> response) {//получаем ответ
                 if(response.code() == 200) {
@@ -43,15 +44,35 @@ public class ListTownsViewModel extends ViewModel {
             }
         });
     }
+    private final MutableLiveData<TownCard> townCard = new MutableLiveData<>();
+
+     public void setTownCard() {
+        TownCard tempTownCard = new TownCard();
+        if (getWeatherData().getValue() != null){
+            tempTownCard.setTownName(getGeoData().getValue().getResponse().getGeoObjectCollection().getMetaDataProperty().getGeocoderResponseMetaData().getRequest());
+            tempTownCard.setTempToday(getWeatherData().getValue().getFact().getTemp());
+            tempTownCard.setTempTomorrow(getWeatherData().getValue().getForecasts().get(1).getParts().getDayShort().getTemp());
+            tempTownCard.setDateFirstDay(getWeatherData().getValue().getForecasts().get(0).getDate());
+            tempTownCard.setDateSecondDay(getWeatherData().getValue().getForecasts().get(1).getDate());
+            tempTownCard.setDateThirdDay(getWeatherData().getValue().getForecasts().get(2).getDate());
+            tempTownCard.setTempFirstDay(getWeatherData().getValue().getForecasts().get(0).getParts().getDayShort().getTemp());
+            tempTownCard.setTempSecondDay(getWeatherData().getValue().getForecasts().get(1).getParts().getDayShort().getTemp());
+            tempTownCard.setTempThirdDay(getWeatherData().getValue().getForecasts().get(2).getParts().getDayShort().getTemp());
+        }
+        townCard.setValue(tempTownCard);
+    }
+
+    public LiveData<TownCard> getTownCard() {
+        return townCard;
+    }
 
 
-    public void downloadGeoData() {
-        App.getApiGeo().getGeoPosition("5099ea72-fb4b-49e4-a88c-68794153a08a", "json", "Москва").enqueue(new Callback<ResponseGeoposition>() {
+    public void downloadGeoData(String townName) {
+        App.getApiGeo().getGeoPosition("5099ea72-fb4b-49e4-a88c-68794153a08a", "json", townName).enqueue(new Callback<ResponseGeoposition>() {
             @Override
             public void onResponse(Call<ResponseGeoposition> call, Response<ResponseGeoposition> response) {
                 if (response.code() == 200){
                     setGeoData(response.body());
-                    //downloadWeatherData();
                 }
             }
 
@@ -93,43 +114,74 @@ public class ListTownsViewModel extends ViewModel {
                     .getPos();
         }
         subStrGeoPos = geoPos.split(" ");
+        downloadWeatherData(subStrGeoPos[1], subStrGeoPos[0]);
     }
 
-    public String getLonGeoPos() {
-        return subStrGeoPos[0];
-    }
+//    public String getLonGeoPos() {
+//        return subStrGeoPos[0];
+//    }
+//
+//    public String getLatGeoPos () {
+//        //getGeoPos();
+//        return subStrGeoPos[1];
+//    }
 
-    public String getLatGeoPos () {
-        if (subStrGeoPos == null) getGeoPos();
-        return subStrGeoPos[1];
-    }
+
+    private final MutableLiveData<List<Town>> townsRussian = new MutableLiveData<>();
+
+    private final MutableLiveData<List<Town>> townsOthers = new MutableLiveData<>();
 
 
-    String[] arrTownsRussian = {"Москва", "Санкт-Петербург", "Екатеринбург", "Краснодар", "Ростов-на-Дону", "Самара", "Архангельск", "Тула", "Брянск", "Мурманск"};
-    private List<Town> townsRussian = new ArrayList<>();
-    String[] arrTownsOthers = {"Нью-Йорк", "Лондон", "Париж", "Берлин", "Токио", "Пхеньян", "Тбилиси", "Вена", "Буэнос-Айрес", "Рейкъявик"};
-    private List<Town> townsOthers = new ArrayList<>();
 
     public void setTowns() {
         Town town;
+        String[] arrTownsRussian = {"Москва", "Санкт-Петербург", "Екатеринбург", "Краснодар", "Ростов-на-Дону", "Самара", "Архангельск", "Тула", "Брянск", "Мурманск"};
+        String[] arrTownsOthers = {"Нью-Йорк", "Лондон", "Париж", "Берлин", "Токио", "Пхеньян", "Тбилиси", "Вена", "Буэнос-Айрес", "Рейкъявик"};
+        List<Town> listTownsRussian = new ArrayList<>();
+        List<Town> listTownsOthers = new ArrayList<>();
+
+
         for (String townRussian:arrTownsRussian) {
             town = new Town();
             town.setName(townRussian);
-            townsRussian.add(town);
+            listTownsRussian.add(town);
         }
+        townsRussian.setValue(listTownsRussian);
+
         for (String townOther:arrTownsOthers) {
             town = new Town();
             town.setName(townOther);
-            townsOthers.add(town);
+            listTownsOthers.add(town);
         }
+        townsOthers.setValue(listTownsOthers);
     }
 
-    public List<Town> getTownsRussian() {
+    public MutableLiveData<List<Town>> getTownsRussian() {
         return townsRussian;
     }
 
-    public List<Town> getTownsOthers() {
+    public MutableLiveData<List<Town>> getTownsOthers() {
         return townsOthers;
     }
 
+    /*For observe to launch fragment*/
+    private final MutableLiveData<String> fragmentLaunch = new MutableLiveData<>();
+
+    public MutableLiveData<String> getFragmentLaunch() {
+        return fragmentLaunch;
+    }
+
+    public void setFragmentLaunch(String setLaunch) {
+        fragmentLaunch.setValue(setLaunch);
+    }
+
+    private boolean Russian;
+
+    public void setRussian(boolean isRussian) {
+        this.Russian = isRussian;
+    }
+
+    public boolean isRussian() {
+        return Russian;
+    }
 }

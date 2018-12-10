@@ -1,6 +1,8 @@
 package ru.orehovai.weatherforboroda;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,25 +11,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import ru.orehovai.weatherforboroda.databinding.TownCardFragmentBinding;
+
 public class TownCardFragment extends Fragment {
 
-    private TownCardViewModel mViewModel;
+    private ListTownsViewModel model;
 
-    public static TownCardFragment newInstance() {
-        return new TownCardFragment();
-    }
+    private TownCardFragmentBinding binding;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.town_card_fragment, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.town_card_fragment, container, false);
+        model = ViewModelProviders.of(getActivity()).get(ListTownsViewModel.class);
+        //binding.setLifecycleOwner(this);
+        return binding.getRoot();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(TownCardViewModel.class);
-        // TODO: Use the ViewModel
+        binding.setTowncard(model.getTownCard().getValue());
+        binding.executePendingBindings();
     }
 
 }
