@@ -24,6 +24,57 @@ public class ListTownsViewModel extends ViewModel {
 
     private String[] subStrGeoPos;
 
+    private final MutableLiveData<List<Town>> townsRussian = new MutableLiveData<>();
+    private final MutableLiveData<List<Town>> townsOthers = new MutableLiveData<>();
+
+    public void setTowns() {
+        Town town;
+        String[] arrTownsRussian = {"Москва", "Санкт-Петербург", "Екатеринбург", "Краснодар", "Ростов-на-Дону", "Самара", "Архангельск", "Тула", "Брянск", "Мурманск"};
+        String[] arrTownsOthers = {"Нью-Йорк", "Лондон", "Париж", "Берлин", "Токио", "Пхеньян", "Тбилиси", "Вена", "Буэнос-Айрес", "Рейкъявик"};
+        List<Town> listTownsRussian = new ArrayList<>();
+        List<Town> listTownsOthers = new ArrayList<>();
+
+        for (String townRussian:arrTownsRussian) {
+            town = new Town();
+            town.setName(townRussian);
+            listTownsRussian.add(town);
+        }
+        townsRussian.setValue(listTownsRussian);
+
+        for (String townOther:arrTownsOthers) {
+            town = new Town();
+            town.setName(townOther);
+            listTownsOthers.add(town);
+        }
+        townsOthers.setValue(listTownsOthers);
+    }
+
+    public MutableLiveData<List<Town>> getTownsRussian() {
+        return townsRussian;
+    }
+
+    public MutableLiveData<List<Town>> getTownsOthers() {
+        return townsOthers;
+    }
+
+
+    
+    public void downloadGeoData(String townName) {
+        App.getApiGeo().getGeoPosition("5099ea72-fb4b-49e4-a88c-68794153a08a", "json", townName).enqueue(new Callback<ResponseGeoposition>() {
+            @Override
+            public void onResponse(Call<ResponseGeoposition> call, Response<ResponseGeoposition> response) {
+                if (response.code() == 200){
+                    setGeoData(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseGeoposition> call, Throwable t) {
+
+            }
+        });
+    }
+
     public void downloadWeatherData(String lat, String lon){
         App.getAPI().getWeatherData(lat, lon, 3, false, false).enqueue(new Callback<WeatherData>() {//используем Retrofit 2 и асинхронную загрузку
             @Override
@@ -67,21 +118,7 @@ public class ListTownsViewModel extends ViewModel {
     }
 
 
-    public void downloadGeoData(String townName) {
-        App.getApiGeo().getGeoPosition("5099ea72-fb4b-49e4-a88c-68794153a08a", "json", townName).enqueue(new Callback<ResponseGeoposition>() {
-            @Override
-            public void onResponse(Call<ResponseGeoposition> call, Response<ResponseGeoposition> response) {
-                if (response.code() == 200){
-                    setGeoData(response.body());
-                }
-            }
 
-            @Override
-            public void onFailure(Call<ResponseGeoposition> call, Throwable t) {
-
-            }
-        });
-    }
 
     private final MutableLiveData<WeatherData> weatherData = new MutableLiveData<>();
 
@@ -127,42 +164,7 @@ public class ListTownsViewModel extends ViewModel {
 //    }
 
 
-    private final MutableLiveData<List<Town>> townsRussian = new MutableLiveData<>();
 
-    private final MutableLiveData<List<Town>> townsOthers = new MutableLiveData<>();
-
-
-
-    public void setTowns() {
-        Town town;
-        String[] arrTownsRussian = {"Москва", "Санкт-Петербург", "Екатеринбург", "Краснодар", "Ростов-на-Дону", "Самара", "Архангельск", "Тула", "Брянск", "Мурманск"};
-        String[] arrTownsOthers = {"Нью-Йорк", "Лондон", "Париж", "Берлин", "Токио", "Пхеньян", "Тбилиси", "Вена", "Буэнос-Айрес", "Рейкъявик"};
-        List<Town> listTownsRussian = new ArrayList<>();
-        List<Town> listTownsOthers = new ArrayList<>();
-
-
-        for (String townRussian:arrTownsRussian) {
-            town = new Town();
-            town.setName(townRussian);
-            listTownsRussian.add(town);
-        }
-        townsRussian.setValue(listTownsRussian);
-
-        for (String townOther:arrTownsOthers) {
-            town = new Town();
-            town.setName(townOther);
-            listTownsOthers.add(town);
-        }
-        townsOthers.setValue(listTownsOthers);
-    }
-
-    public MutableLiveData<List<Town>> getTownsRussian() {
-        return townsRussian;
-    }
-
-    public MutableLiveData<List<Town>> getTownsOthers() {
-        return townsOthers;
-    }
 
     /*For observe to launch fragment*/
     private final MutableLiveData<String> fragmentLaunch = new MutableLiveData<>();

@@ -31,7 +31,8 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(@Nullable List<Town> towns) {
                 model.setRussian(true);
                 if (towns != null) {
-                   setFragment(new ListTownsFragment());
+                    model.downloadGeoData(towns);
+                   //setFragment(new ListTownsFragment());
                 }
             }
         });

@@ -41,7 +41,7 @@ public class TownsListAdapter extends RecyclerView.Adapter<TownsListAdapter.Town
         holder.binding.cardTown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                model.downloadGeoData(listTowns.get(position).getName());
+                //model.downloadGeoData(listTowns.get(position).getName());
             }
         });
     }
