@@ -1,9 +1,11 @@
 package ru.orehovai.weatherforboroda;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,18 +15,19 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import ru.orehovai.weatherforboroda.databinding.TownsItemBinding;
-import ru.orehovai.weatherforboroda.model.Town;
+import ru.orehovai.weatherforboroda.model.TownCard;
+import ru.orehovai.weatherforboroda.model.weather.WeatherData;
 
 public class TownsListAdapter extends RecyclerView.Adapter<TownsListAdapter.TownViewHolder> {
 
-    private List<Town> listTowns;
-    //private Context context;
+    private List<TownCard> listTowns;
+    private Context context;
     private ListTownsViewModel model;
 
-    public TownsListAdapter(List<Town> listTowns, Context context) {
+    public TownsListAdapter(List<TownCard> listTowns, Context context) {
         this.listTowns = listTowns;
-        //this.context = context;
-        model = ViewModelProviders.of((FragmentActivity)context).get(ListTownsViewModel.class);
+        this.context = context;
+        model = ViewModelProviders.of((MainActivity)context).get(ListTownsViewModel.class);
     }
 
     @NonNull
@@ -41,7 +44,8 @@ public class TownsListAdapter extends RecyclerView.Adapter<TownsListAdapter.Town
         holder.binding.cardTown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //model.downloadGeoData(listTowns.get(position).getName());
+                model.setCurrentTown(listTowns.get(position));
+                model.setFragmentLaunch("town_card");
             }
         });
     }
@@ -60,7 +64,7 @@ public class TownsListAdapter extends RecyclerView.Adapter<TownsListAdapter.Town
             this.binding = binding;
         }
 
-        void bind(Town town) {
+        void bind(TownCard town) {
             binding.setTown(town);
             binding.executePendingBindings();
         }

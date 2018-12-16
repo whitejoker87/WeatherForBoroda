@@ -31,7 +31,7 @@ public class TownCardFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        binding.setTowncard(model.getTownCard().getValue());
+        binding.setTowncard(model.getCurrentTown());
         binding.executePendingBindings();
     }
 
