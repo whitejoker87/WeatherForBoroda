@@ -23,18 +23,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         model = ViewModelProviders.of(this).get(ListTownsViewModel.class);
-        model.setTownsRussian();
+        model.setTownsRussian();//заполнение списка русских городов
 
+        //наблюдаем за изменением списка русских городов
         model.getTownsRussian().observe(this, new Observer<List<TownCard>>() {
             @Override
             public void onChanged(@Nullable List<TownCard> towns) {
-                model.setRussian(true);
+                model.setRussian(true);//устанавливаем флаг для определения какой списко грузить
                 if (towns != null) {
-                    model.fillTownsList(towns, 0);
+                    model.fillTownsList(towns, 0);//когда список готов - заполняем его данными
                 }
             }
         });
 
+        //наблюдаем за изменением списка иностранных гороов
         model.getTownsOthers().observe(this, new Observer<List<TownCard>>() {
             @Override
             public void onChanged(@Nullable List<TownCard> towns) {
@@ -44,15 +46,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //наблюдаем сигнал о загрузке фрагмента
         model.getFragmentLaunch().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String aString) {
                 if (aString != null) {
                     switch (aString) {
-                        case "towns_list":
+                        case "towns_list"://фрагмент списка городов
                             setFragment(new ListTownsFragment());
                             break;
-                        case "town_card":
+                        case "town_card"://фрагмент карточки города
                             setFragment(new TownCardFragment());
                             break;
                         default:
@@ -62,31 +65,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //наблюдаем данные геокодера
         model.getGeoData().observe(this, new Observer<ResponseGeoposition>() {
             @Override
             public void onChanged(@Nullable ResponseGeoposition responseGeoposition) {
-                if (responseGeoposition != null) model.getGeoPos();;
+                if (responseGeoposition != null) model.getGeoPos();//как только получены данные - извлекаем координаты
             }
         });
 
+        //наблюдаем данные погоды
         model.getWeatherData().observe(this, new Observer<WeatherData>() {
             @Override
             public void onChanged(@Nullable WeatherData weatherData) {
                 if (weatherData != null) {
-                    model.setTempTown(model.getCurrentTown());
+                    model.setTownCard(model.getCurrentTown());//как только получены данные о погоде заполняем их в объект города
                 }
             }
         });
-
-//        model.getTownCard().observe(this, new Observer<TownCard>() {
-//            @Override
-//            public void onChanged(@Nullable TownCard townCard) {
-//                if (townCard != null)model.setFragmentLaunch("town_card");
-//            }
-//        });
     }
 
     public void setFragment(Fragment fragment){
+        //не загружать новый фрагмент если это фрагмент списка городов и сейчас уже есть какой то фрагмент в стеке
         if (fragment instanceof ListTownsFragment && getSupportFragmentManager().getFragments().size() > 0) {
             return;
         }

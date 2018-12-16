@@ -17,15 +17,14 @@ import ru.orehovai.weatherforboroda.model.weather.WeatherData;
 
 public class ListTownsViewModel extends ViewModel {
 
-    private String apikey = "c3a7cb4a-d543-4386-acd7-886d5fbb9839";
+    private String apikey = "5099ea72-fb4b-49e4-a88c-68794153a08a";
     private String format = "json";
-    private String geocode = null;
 
-    private String[] subStrGeoPos;
+    private String[] subStrGeoPos;//масссив координат
 
-    private TownCard currentTown;
-    private List<TownCard> currentListTowns;
-    private int currentPos;
+    private TownCard currentTown;//город заполняемый сейчас
+    private List<TownCard> currentListTowns;//списко городов заполняемый сейчас
+    private int currentPos;//текущая позиция в списке городов
 
     public void setCurrentTown(TownCard currentTown) {
         this.currentTown = currentTown;
@@ -35,8 +34,8 @@ public class ListTownsViewModel extends ViewModel {
         return currentTown;
     }
 
-    private final MutableLiveData<List<TownCard>> townsRussian = new MutableLiveData<>();
-    private final MutableLiveData<List<TownCard>> townsOthers = new MutableLiveData<>();
+    private final MutableLiveData<List<TownCard>> townsRussian = new MutableLiveData<>();//список русских городов
+    private final MutableLiveData<List<TownCard>> townsOthers = new MutableLiveData<>();//список иностранных городов
 
     public void setTownsRussian() {
         TownCard town;
@@ -74,23 +73,24 @@ public class ListTownsViewModel extends ViewModel {
     }
 
     public void fillTownsList(List<TownCard>  towns, int pos){
-        if (pos < towns.size()){
+        if (pos < towns.size()){//пока не закончатся города в переданном списке
             currentTown = towns.get(pos);
             currentListTowns = towns;
             currentPos = pos;
-            downloadGeoData(currentTown.getTownName());
+            downloadGeoData(currentTown.getTownName());//скачать данные геокодирования для города
         }
-        else if (getTownsOthers().getValue() == null)
+        else if (getTownsOthers().getValue() == null)//законился список русских городов - заполняем иносттранные
             setTownsOthers();
             else setFragmentLaunch("towns_list");
     }
 
     public void downloadGeoData(String townName) {
-        App.getApiGeo().getGeoPosition("5099ea72-fb4b-49e4-a88c-68794153a08a", "json", townName).enqueue(new Callback<ResponseGeoposition>() {
+        //асинхронно получаем данные от геокодера
+        App.getApiGeo().getGeoPosition(apikey, format, townName).enqueue(new Callback<ResponseGeoposition>() {
             @Override
             public void onResponse(Call<ResponseGeoposition> call, Response<ResponseGeoposition> response) {
                 if (response.code() == 200)
-                    setGeoData(response.body());
+                    setGeoData(response.body());//полученные данные сохраняем
             }
 
             @Override
@@ -101,11 +101,12 @@ public class ListTownsViewModel extends ViewModel {
     }
 
     public void downloadWeatherData(String lat, String lon){
-        App.getAPI().getWeatherData(lat, lon, 3, false, false).enqueue(new Callback<WeatherData>() {
+        //асинхронно получаем данные от api погоды
+        App.getAPI().getWeatherData(apikey, lat, lon, 3, false, false).enqueue(new Callback<WeatherData>() {
             @Override
             public void onResponse(Call<WeatherData> call, Response<WeatherData> response) {
                 if (response.code() == 200)
-                    setWeatherData(response.body());
+                    setWeatherData(response.body());//сохраняем данные
             }
 
             @Override
@@ -114,32 +115,8 @@ public class ListTownsViewModel extends ViewModel {
             }
         });
     }
-//    private final MutableLiveData<TownCard> townCard = new MutableLiveData<>();
 
-//     public void setTownCard() {
-//        TownCard tempTownCard = new TownCard();
-//        if (getWeatherData().getValue() != null){
-//            tempTownCard.setTownName(getGeoData().getValue().getResponse().getGeoObjectCollection().getMetaDataProperty().getGeocoderResponseMetaData().getRequest());
-//            tempTownCard.setTempToday(getWeatherData().getValue().getFact().getTemp());
-//            tempTownCard.setTempTomorrow(getWeatherData().getValue().getForecasts().get(1).getParts().getDayShort().getTemp());
-//            tempTownCard.setDateFirstDay(getWeatherData().getValue().getForecasts().get(0).getDate());
-//            tempTownCard.setDateSecondDay(getWeatherData().getValue().getForecasts().get(1).getDate());
-//            tempTownCard.setDateThirdDay(getWeatherData().getValue().getForecasts().get(2).getDate());
-//            tempTownCard.setTempFirstDay(getWeatherData().getValue().getForecasts().get(0).getParts().getDayShort().getTemp());
-//            tempTownCard.setTempSecondDay(getWeatherData().getValue().getForecasts().get(1).getParts().getDayShort().getTemp());
-//            tempTownCard.setTempThirdDay(getWeatherData().getValue().getForecasts().get(2).getParts().getDayShort().getTemp());
-//        }
-//        townCard.setValue(tempTownCard);
-//    }
-
-//    public LiveData<TownCard> getTownCard() {
-//        return townCard;
-//    }
-
-
-
-
-    private final MutableLiveData<WeatherData> weatherData = new MutableLiveData<>();
+    private final MutableLiveData<WeatherData> weatherData = new MutableLiveData<>();//данные о погоде
 
     public void setWeatherData(WeatherData data) {
         weatherData.setValue(data);
@@ -148,7 +125,7 @@ public class ListTownsViewModel extends ViewModel {
         return weatherData;
     }
 
-    private final MutableLiveData<ResponseGeoposition> geoData = new MutableLiveData<>();
+    private final MutableLiveData<ResponseGeoposition> geoData = new MutableLiveData<>();//данные геокодера
 
     public void setGeoData(ResponseGeoposition data) {
         geoData.setValue(data);
@@ -157,7 +134,7 @@ public class ListTownsViewModel extends ViewModel {
         return geoData;
     }
 
-    public void getGeoPos() {
+    public void getGeoPos() {//получаем координаты
         String geoPos = "";
         if (geoData.getValue() != null) {
             geoPos = geoData.getValue()
@@ -170,11 +147,11 @@ public class ListTownsViewModel extends ViewModel {
                     .getPos();
         }
         subStrGeoPos = geoPos.split(" ");
-        downloadWeatherData(subStrGeoPos[1], subStrGeoPos[0]);
+        downloadWeatherData(subStrGeoPos[1], subStrGeoPos[0]);//скачиваем данные погоды по координатам(яндекс возвращает координаты в обратном порядке)
     }
 
-    public void setTempTown(TownCard town){
-        if (town.getTownName().contains(Objects.requireNonNull(getGeoData()
+    public void setTownCard(TownCard town){//заполняем объект города
+        if (town.getTownName().contains(Objects.requireNonNull(getGeoData()//если название города совпадает с названием города из ответа api погоды заполняем его
                 .getValue())
                 .getResponse()
                 .getGeoObjectCollection()
@@ -190,11 +167,10 @@ public class ListTownsViewModel extends ViewModel {
             town.setTempSecondDay(getWeatherData().getValue().getForecasts().get(1).getParts().getDayShort().getTemp());
             town.setTempThirdDay(getWeatherData().getValue().getForecasts().get(2).getParts().getDayShort().getTemp());
         }
-        fillTownsList(currentListTowns, currentPos + 1);
+        fillTownsList(currentListTowns, currentPos + 1);//приступаем к следующему городу
     }
 
-    /*For observe to launch fragment*/
-    private final MutableLiveData<String> fragmentLaunch = new MutableLiveData<>();
+    private final MutableLiveData<String> fragmentLaunch = new MutableLiveData<>();//для запуска фрагмента
 
     public MutableLiveData<String> getFragmentLaunch() {
         return fragmentLaunch;
@@ -204,7 +180,7 @@ public class ListTownsViewModel extends ViewModel {
         fragmentLaunch.setValue(setLaunch);
     }
 
-    private boolean Russian;
+    private boolean Russian;//флаг для загрузки списка русских городов
 
     public void setRussian(boolean isRussian) {
         this.Russian = isRussian;
@@ -212,5 +188,15 @@ public class ListTownsViewModel extends ViewModel {
 
     public boolean isRussian() {
         return Russian;
+    }
+
+    private boolean today;//флаг для загрузки погоды на сегодня
+
+    public boolean isToday() {
+        return today;
+    }
+
+    public void setToday(boolean today) {
+        this.today = today;
     }
 }

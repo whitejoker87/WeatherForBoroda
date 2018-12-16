@@ -1,12 +1,9 @@
 package ru.orehovai.weatherforboroda;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,12 +18,12 @@ import ru.orehovai.weatherforboroda.model.weather.WeatherData;
 public class TownsListAdapter extends RecyclerView.Adapter<TownsListAdapter.TownViewHolder> {
 
     private List<TownCard> listTowns;
-    private Context context;
+    //private Context context;
     private ListTownsViewModel model;
 
     public TownsListAdapter(List<TownCard> listTowns, Context context) {
         this.listTowns = listTowns;
-        this.context = context;
+        //this.context = context;
         model = ViewModelProviders.of((MainActivity)context).get(ListTownsViewModel.class);
     }
 
@@ -40,6 +37,7 @@ public class TownsListAdapter extends RecyclerView.Adapter<TownsListAdapter.Town
 
     @Override
     public void onBindViewHolder(@NonNull final TownViewHolder holder, final int position) {
+        listTowns.get(position).setToday(true);
         holder.bind(listTowns.get(position));
         holder.binding.cardTown.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,6 +64,7 @@ public class TownsListAdapter extends RecyclerView.Adapter<TownsListAdapter.Town
 
         void bind(TownCard town) {
             binding.setTown(town);
+            binding.setModel(model);
             binding.executePendingBindings();
         }
     }

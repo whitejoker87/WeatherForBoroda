@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import ru.orehovai.weatherforboroda.model.geoposition.ResponseGeoposition;
 import ru.orehovai.weatherforboroda.model.weather.WeatherData;
 
-public class App extends Application {
+public class App extends Application {//класс для retrofit
 
     private static IYandexWeatherAPI api;
     private static IYandexGeopositionAPI apiGeo;
@@ -15,7 +15,6 @@ public class App extends Application {
     private static WeatherData data;
     private static ResponseGeoposition dataGeo;
 
-    //синглтон-оъбект с инфой из JSON
     public static synchronized WeatherData getWeatherData() {
         if (data == null) {
             data = new WeatherData();
@@ -42,7 +41,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
 
-        Retrofit retrofit = new Retrofit.Builder()//запрос для загрузки JSON
+        Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.weather.yandex.ru/v1/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -58,7 +57,7 @@ public class App extends Application {
 
     public static IYandexWeatherAPI getAPI() {
         return api;
-    }//интерфейс для загрузки JSON
+    }
 
     public static IYandexGeopositionAPI getApiGeo() {
         return apiGeo;

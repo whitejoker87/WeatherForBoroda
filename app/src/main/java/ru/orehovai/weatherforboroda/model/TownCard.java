@@ -2,6 +2,7 @@ package ru.orehovai.weatherforboroda.model;
 
 public class TownCard {
 
+    private boolean today;
     private String townName;
     private int tempToday;
     private int tempTomorrow;
@@ -12,6 +13,13 @@ public class TownCard {
     private String dateSecondDay;
     private String dateThirdDay;
 
+    public boolean isToday() {
+        return today;
+    }
+
+    public void setToday(boolean today) {
+        this.today = today;
+    }
 
     public String getTownName() {
         return townName;
