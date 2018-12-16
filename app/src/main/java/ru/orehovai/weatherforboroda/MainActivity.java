@@ -1,15 +1,20 @@
 package ru.orehovai.weatherforboroda;
 
+import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import java.util.List;
 
+import ru.orehovai.weatherforboroda.databinding.ActivityMainBinding;
 import ru.orehovai.weatherforboroda.model.TownCard;
 import ru.orehovai.weatherforboroda.model.geoposition.ResponseGeoposition;
 import ru.orehovai.weatherforboroda.model.weather.WeatherData;
@@ -17,13 +22,28 @@ import ru.orehovai.weatherforboroda.model.weather.WeatherData;
 public class MainActivity extends AppCompatActivity {
 
     ListTownsViewModel model;
+    ProgressBar progressBar;
+    ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         model = ViewModelProviders.of(this).get(ListTownsViewModel.class);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        progressBar = binding.progressBar;
+        model.setProgressbar(true);
         model.setTownsRussian();//заполнение списка русских городов
+
+        model.isProgressbar().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean aBoolean) {
+                if (aBoolean != null){
+                    if (aBoolean) progressBar.setVisibility(View.VISIBLE);
+                    else progressBar.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
 
         //наблюдаем за изменением списка русских городов
         model.getTownsRussian().observe(this, new Observer<List<TownCard>>() {

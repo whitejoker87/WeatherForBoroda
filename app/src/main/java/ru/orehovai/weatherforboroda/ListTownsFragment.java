@@ -104,6 +104,7 @@ public class ListTownsFragment extends Fragment {
 
             }
         });
+        mViewModel.setProgressbar(false);
     }
 
     private void fillTodayList() {

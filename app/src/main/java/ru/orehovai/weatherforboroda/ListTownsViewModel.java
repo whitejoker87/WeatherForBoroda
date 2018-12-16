@@ -180,6 +180,16 @@ public class ListTownsViewModel extends ViewModel {
         fragmentLaunch.setValue(setLaunch);
     }
 
+    private final MutableLiveData<Boolean> progressbar = new MutableLiveData<>();//для запуска фрагмента
+
+    public MutableLiveData<Boolean> isProgressbar() {
+        return progressbar;
+    }
+
+    public void setProgressbar(Boolean bar) {
+        progressbar.setValue(bar);
+    }
+
     private boolean Russian;//флаг для загрузки списка русских городов
 
     public void setRussian(boolean isRussian) {
