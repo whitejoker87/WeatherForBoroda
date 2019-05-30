@@ -3,6 +3,8 @@ package ru.orehovai.weatherforboroda.model.weather;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class Forecast {
 
     @SerializedName("date")
@@ -20,12 +22,6 @@ public class Forecast {
     @SerializedName("sunset")
     @Expose
     private String sunset;
-    @SerializedName("rise_begin")
-    @Expose
-    private String riseBegin;
-    @SerializedName("set_end")
-    @Expose
-    private String setEnd;
     @SerializedName("moon_code")
     @Expose
     private Integer moonCode;
@@ -34,7 +30,8 @@ public class Forecast {
     private String moonText;
     @SerializedName("parts")
     @Expose
-    private Parts parts;
+    private List<Part> parts = null;
+
 
     public String getDate() {
         return date;
@@ -76,22 +73,6 @@ public class Forecast {
         this.sunset = sunset;
     }
 
-    public String getRiseBegin() {
-        return riseBegin;
-    }
-
-    public void setRiseBegin(String riseBegin) {
-        this.riseBegin = riseBegin;
-    }
-
-    public String getSetEnd() {
-        return setEnd;
-    }
-
-    public void setSetEnd(String setEnd) {
-        this.setEnd = setEnd;
-    }
-
     public Integer getMoonCode() {
         return moonCode;
     }
@@ -108,11 +89,11 @@ public class Forecast {
         this.moonText = moonText;
     }
 
-    public Parts getParts() {
+    public List<Part> getParts() {
         return parts;
     }
 
-    public void setParts(Parts parts) {
+    public void setParts(List<Part> parts) {
         this.parts = parts;
     }
 

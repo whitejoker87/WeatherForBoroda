@@ -102,7 +102,7 @@ public class ListTownsViewModel extends ViewModel {
 
     public void downloadWeatherData(String lat, String lon){
         //асинхронно получаем данные от api погоды
-        App.getAPI().getWeatherData(apikey, lat, lon, 3, false, false).enqueue(new Callback<WeatherData>() {
+        App.getAPI().getWeatherData(apikey, lat, lon/*, 3, false, false*/).enqueue(new Callback<WeatherData>() {
             @Override
             public void onResponse(Call<WeatherData> call, Response<WeatherData> response) {
                 if (response.code() == 200)
@@ -159,13 +159,13 @@ public class ListTownsViewModel extends ViewModel {
                 .getGeocoderResponseMetaData()
                 .getRequest())) {
             town.setTempToday(Objects.requireNonNull(getWeatherData().getValue()).getFact().getTemp());
-            town.setTempTomorrow(getWeatherData().getValue().getForecasts().get(1).getParts().getDayShort().getTemp());
-            town.setDateFirstDay(getWeatherData().getValue().getForecasts().get(0).getDate());
-            town.setDateSecondDay(getWeatherData().getValue().getForecasts().get(1).getDate());
-            town.setDateThirdDay(getWeatherData().getValue().getForecasts().get(2).getDate());
-            town.setTempFirstDay(getWeatherData().getValue().getForecasts().get(0).getParts().getDayShort().getTemp());
-            town.setTempSecondDay(getWeatherData().getValue().getForecasts().get(1).getParts().getDayShort().getTemp());
-            town.setTempThirdDay(getWeatherData().getValue().getForecasts().get(2).getParts().getDayShort().getTemp());
+            town.setTempTomorrow(getWeatherData().getValue().getForecast().getParts().get(1).getTempAvg());
+            town.setDateFirstDay(getWeatherData().getValue().getForecast().getParts().get(0).getPartName());
+            town.setDateSecondDay(getWeatherData().getValue().getForecast().getParts().get(1).getPartName());
+            town.setDateThirdDay(getWeatherData().getValue().getForecast().getParts().get(1).getPartName());
+            town.setTempFirstDay(getWeatherData().getValue().getForecast().getParts().get(0).getTempAvg());
+            town.setTempSecondDay(getWeatherData().getValue().getForecast().getParts().get(1).getTempAvg());
+            town.setTempThirdDay(getWeatherData().getValue().getForecast().getParts().get(1).getTempAvg());
         }
         fillTownsList(currentListTowns, currentPos + 1);//приступаем к следующему городу
     }

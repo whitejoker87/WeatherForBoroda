@@ -20,9 +20,9 @@ public class WeatherData {
     @SerializedName("fact")
     @Expose
     private Fact fact;
-    @SerializedName("forecasts")
+    @SerializedName("forecast")
     @Expose
-    private List<Forecast> forecasts = null;
+    private Forecast forecast;
 
     public Integer getNow() {
         return now;
@@ -56,12 +56,12 @@ public class WeatherData {
         this.fact = fact;
     }
 
-    public List<Forecast> getForecasts() {
-        return forecasts;
+    public Forecast getForecast() {
+        return forecast;
     }
 
-    public void setForecasts(List<Forecast> forecasts) {
-        this.forecasts = forecasts;
+    public void setForecast(Forecast forecast) {
+        this.forecast = forecast;
     }
 
 }
